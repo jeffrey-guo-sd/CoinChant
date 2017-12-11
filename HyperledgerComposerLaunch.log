@@ -1,0 +1,153 @@
+YellowDwarf:HyperledgerComposer jeffrey$ curl -sSL https://hyperledger.github.io/composer/install-hlfv1.sh | bash
+PAYLOAD_LINE=143
+PAYLOAD_START=144
+Error response from daemon: Bad response from Docker engine
+YellowDwarf:HyperledgerComposer jeffrey$ curl -sSL https://hyperledger.github.io/composer/install-hlfv1.sh | bash
+PAYLOAD_LINE=143
+PAYLOAD_START=144
+Removing all containers
+8599e26f04e3
+0dbe1ac062b5
+0d57a0df0874
+Development only script for Hyperledger Fabric control
+Running 'downloadFabric.sh'
+FABRIC_VERSION is unset, assuming hlfv1
+FABRIC_START_TIMEOUT is unset, assuming 15 (seconds)
+
+# Set ARCH
+ARCH=`uname -m`
+uname -m
+
+# Grab the current directory.
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd 
+ dirname "${BASH_SOURCE[0]}" 
+
+# Pull and tag the latest Hyperledger Fabric base image.
+docker pull hyperledger/fabric-peer:$ARCH-1.0.4
+x86_64-1.0.4: Pulling from hyperledger/fabric-peer
+Digest: sha256:42bf413394938a48af26a4cc6ac6393d8c61acb51736a1fe6f45447850314778
+Status: Image is up to date for hyperledger/fabric-peer:x86_64-1.0.4
+docker pull hyperledger/fabric-ca:$ARCH-1.0.4
+x86_64-1.0.4: Pulling from hyperledger/fabric-ca
+Digest: sha256:a9402ba2155b834d6e57c04607018b40536547414375308bb6eaf2558c87d3f0
+Status: Image is up to date for hyperledger/fabric-ca:x86_64-1.0.4
+docker pull hyperledger/fabric-ccenv:$ARCH-1.0.4
+x86_64-1.0.4: Pulling from hyperledger/fabric-ccenv
+Digest: sha256:fbe4fe3f6cbde1f8a121aeb382ab45e9c39618bca3df523dabd43c45222e0f43
+Status: Image is up to date for hyperledger/fabric-ccenv:x86_64-1.0.4
+docker pull hyperledger/fabric-orderer:$ARCH-1.0.4
+x86_64-1.0.4: Pulling from hyperledger/fabric-orderer
+Digest: sha256:f1f367dce7ad74d00c8e57c965cb404ef6827fd66903f07617ff40ae115f6eb0
+Status: Image is up to date for hyperledger/fabric-orderer:x86_64-1.0.4
+docker pull hyperledger/fabric-couchdb:$ARCH-1.0.4
+x86_64-1.0.4: Pulling from hyperledger/fabric-couchdb
+Digest: sha256:05f560a61abeb001e3325a033592aa77ac3470f502b2ffe178fc9a5ae148cb5e
+Status: Image is up to date for hyperledger/fabric-couchdb:x86_64-1.0.4
+Development only script for Hyperledger Fabric control
+Running 'startFabric.sh'
+FABRIC_VERSION is unset, assuming hlfv1
+FABRIC_START_TIMEOUT is unset, assuming 15 (seconds)
+
+#Detect architecture
+ARCH=`uname -m`
+uname -m
+
+# Grab the current directory
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd 
+ dirname "${BASH_SOURCE[0]}" 
+
+#
+
+ARCH=$ARCH docker-compose -f "${DIR}"/composer/docker-compose.yml down
+Removing network composer_default
+ARCH=$ARCH docker-compose -f "${DIR}"/composer/docker-compose.yml up -d
+Creating network "composer_default" with the default driver
+Creating orderer.example.com ... 
+Creating couchdb ... 
+Creating ca.org1.example.com ... 
+Creating orderer.example.com
+Creating ca.org1.example.com
+Creating couchdb ... done
+Creating peer0.org1.example.com ... 
+Creating peer0.org1.example.com ... done
+
+# wait for Hyperledger Fabric to start
+# incase of errors when running later commands, issue export FABRIC_START_TIMEOUT=<larger number>
+echo ${FABRIC_START_TIMEOUT}
+15
+sleep ${FABRIC_START_TIMEOUT}
+
+# Create the channel
+docker exec peer0.org1.example.com peer channel create -o orderer.example.com:7050 -c composerchannel -f /etc/hyperledger/configtx/composer-channel.tx
+2017-12-11 17:19:18.384 UTC [msp] GetLocalMSP -> DEBU 001 Returning existing local MSP
+2017-12-11 17:19:18.385 UTC [msp] GetDefaultSigningIdentity -> DEBU 002 Obtaining default signing identity
+2017-12-11 17:19:18.424 UTC [channelCmd] InitCmdFactory -> INFO 003 Endorser and orderer connections initialized
+2017-12-11 17:19:18.430 UTC [msp] GetLocalMSP -> DEBU 004 Returning existing local MSP
+2017-12-11 17:19:18.430 UTC [msp] GetDefaultSigningIdentity -> DEBU 005 Obtaining default signing identity
+2017-12-11 17:19:18.430 UTC [msp] GetLocalMSP -> DEBU 006 Returning existing local MSP
+2017-12-11 17:19:18.430 UTC [msp] GetDefaultSigningIdentity -> DEBU 007 Obtaining default signing identity
+2017-12-11 17:19:18.430 UTC [msp/identity] Sign -> DEBU 008 Sign: plaintext: 0A8C060A074F7267314D53501280062D...6D706F736572436F6E736F727469756D 
+2017-12-11 17:19:18.430 UTC [msp/identity] Sign -> DEBU 009 Sign: digest: B545CCD97970EF4EF7F152148C122E51706FCAFB55F61EDA7239B5029E22FBA9 
+2017-12-11 17:19:18.430 UTC [msp] GetLocalMSP -> DEBU 00a Returning existing local MSP
+2017-12-11 17:19:18.430 UTC [msp] GetDefaultSigningIdentity -> DEBU 00b Obtaining default signing identity
+2017-12-11 17:19:18.430 UTC [msp] GetLocalMSP -> DEBU 00c Returning existing local MSP
+2017-12-11 17:19:18.430 UTC [msp] GetDefaultSigningIdentity -> DEBU 00d Obtaining default signing identity
+2017-12-11 17:19:18.430 UTC [msp/identity] Sign -> DEBU 00e Sign: plaintext: 0AC9060A1B08021A060896FCBAD10522...BD3F1A3C3F4825360A52824B11EBA662 
+2017-12-11 17:19:18.430 UTC [msp/identity] Sign -> DEBU 00f Sign: digest: EF78CE439FC0A3E75C19B442B365C520A8AA1DFB782D4B51621F699A5789CA77 
+2017-12-11 17:19:18.684 UTC [msp] GetLocalMSP -> DEBU 010 Returning existing local MSP
+2017-12-11 17:19:18.684 UTC [msp] GetDefaultSigningIdentity -> DEBU 011 Obtaining default signing identity
+2017-12-11 17:19:18.684 UTC [msp] GetLocalMSP -> DEBU 012 Returning existing local MSP
+2017-12-11 17:19:18.684 UTC [msp] GetDefaultSigningIdentity -> DEBU 013 Obtaining default signing identity
+2017-12-11 17:19:18.684 UTC [msp/identity] Sign -> DEBU 014 Sign: plaintext: 0AC9060A1B08021A060896FCBAD10522...7D0A642214F612080A021A0012021A00 
+2017-12-11 17:19:18.684 UTC [msp/identity] Sign -> DEBU 015 Sign: digest: 5F0A70669164D370129ED7E2580A604965B581714CC10066EB1996F39EC6A16D 
+2017-12-11 17:19:18.686 UTC [channelCmd] readBlock -> DEBU 016 Got status: &{NOT_FOUND}
+2017-12-11 17:19:18.686 UTC [msp] GetLocalMSP -> DEBU 017 Returning existing local MSP
+2017-12-11 17:19:18.686 UTC [msp] GetDefaultSigningIdentity -> DEBU 018 Obtaining default signing identity
+2017-12-11 17:19:18.689 UTC [channelCmd] InitCmdFactory -> INFO 019 Endorser and orderer connections initialized
+2017-12-11 17:19:18.890 UTC [msp] GetLocalMSP -> DEBU 01a Returning existing local MSP
+2017-12-11 17:19:18.890 UTC [msp] GetDefaultSigningIdentity -> DEBU 01b Obtaining default signing identity
+2017-12-11 17:19:18.890 UTC [msp] GetLocalMSP -> DEBU 01c Returning existing local MSP
+2017-12-11 17:19:18.890 UTC [msp] GetDefaultSigningIdentity -> DEBU 01d Obtaining default signing identity
+2017-12-11 17:19:18.890 UTC [msp/identity] Sign -> DEBU 01e Sign: plaintext: 0AC9060A1B08021A060896FCBAD10522...E3A92EB2900612080A021A0012021A00 
+2017-12-11 17:19:18.890 UTC [msp/identity] Sign -> DEBU 01f Sign: digest: 8D20DEC70677BAC0A80EF26F75FA73717055F4484052074FDA83AB1EA1819237 
+2017-12-11 17:19:18.894 UTC [channelCmd] readBlock -> DEBU 020 Received block: 0
+2017-12-11 17:19:18.894 UTC [main] main -> INFO 021 Exiting.....
+
+# Join peer0.org1.example.com to the channel.
+docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel join -b composerchannel.block
+2017-12-11 17:19:19.142 UTC [msp] GetLocalMSP -> DEBU 001 Returning existing local MSP
+2017-12-11 17:19:19.142 UTC [msp] GetDefaultSigningIdentity -> DEBU 002 Obtaining default signing identity
+2017-12-11 17:19:19.144 UTC [channelCmd] InitCmdFactory -> INFO 003 Endorser and orderer connections initialized
+2017-12-11 17:19:19.145 UTC [msp/identity] Sign -> DEBU 004 Sign: plaintext: 0A89070A5B08011A0B0897FCBAD10510...7FC4F80CCF391A080A000A000A000A00 
+2017-12-11 17:19:19.145 UTC [msp/identity] Sign -> DEBU 005 Sign: digest: 728E536DEFCFE8B26F8F701A2C283ED8A93BB778AD6581B2937A16E9927D41E2 
+2017-12-11 17:19:19.271 UTC [channelCmd] executeJoin -> INFO 006 Peer joined the channel!
+2017-12-11 17:19:19.271 UTC [main] main -> INFO 007 Exiting.....
+0.16.0: Pulling from hyperledger/composer-playground
+b56ae66c2937: Pull complete 
+f6aca5fc45c4: Pull complete 
+31522c2d8cc9: Pull complete 
+4a6b9b39d32e: Pull complete 
+Digest: sha256:d4898226e240ecbce8f045abe7e2e83f3ead96983692570c8fa81c64d820a586
+Status: Downloaded newer image for hyperledger/composer-playground:0.16.0
+WARNING: Found orphan containers (peer0.org1.example.com, orderer.example.com, couchdb, ca.org1.example.com) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+Creating composer ... 
+Creating composer ... done
+a cards
+a cards/PeerAdmin@hlfv1
+a cards/PeerAdmin@hlfv1/connection.json
+a cards/PeerAdmin@hlfv1/credentials
+a cards/PeerAdmin@hlfv1/metadata.json
+a cards/PeerAdmin@hlfv1/credentials/certificate
+a cards/PeerAdmin@hlfv1/credentials/privateKey
+a client-data
+a client-data/PeerAdmin@hlfv1
+a client-data/PeerAdmin@hlfv1/114aab0e76bf0c78308f89efc4b8c9423e31568da0c340ca187a9b17aa9a4457-priv
+a client-data/PeerAdmin@hlfv1/114aab0e76bf0c78308f89efc4b8c9423e31568da0c340ca187a9b17aa9a4457-pub
+a client-data/PeerAdmin@hlfv1/PeerAdmin
+a client-data/PeerAdmin@hlfv1/PeerAdmin.cert
+
+--------------------------------------------------------------------------------------
+Hyperledger Fabric and Hyperledger Composer installed, and Composer Playground launched
+Please use 'composer.sh' to re-start, and 'composer.sh stop' to shutdown all the Fabric and Composer docker images
